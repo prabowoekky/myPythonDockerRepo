@@ -46,11 +46,8 @@ pipeline {
     stage ('K8S Deploy') {
         steps {
             script {
-                kubernetesDeploy(
-                    configs: 'k8s-deployment.yaml',
-                    kubeconfigId: 'K8S-DC'
-                    )           
-               
+                def image_id = registry + ":$BUILD_NUMBER"
+                sh "ansible-playbook  playbook.yml --extra-vars \"image_id=${image_id}\""
             }
         }
     }
