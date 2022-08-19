@@ -47,6 +47,7 @@ pipeline {
         steps {
             script {
                 sh 'kubectl apply -f k8s-deployment.yaml'
+                sh 'kubectl set image deployment/my-python-deployment my-python-deployment=$registryUrl/$registry:$BUILD_NUMBER'
             }
         }
     }
