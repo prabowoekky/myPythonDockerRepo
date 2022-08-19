@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-python-app
-        image: multiclusterbtpn.azurecr.io/mypython-app
+        image: multiclusterbtpn/mypython-app-may20:15
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
