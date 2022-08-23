@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-python-app
-        image: multiclusterbtpn/mypython-app-may20:15
+        image: kube
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
