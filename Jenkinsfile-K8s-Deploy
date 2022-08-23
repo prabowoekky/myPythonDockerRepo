@@ -46,7 +46,7 @@ pipeline {
     stage ('K8S Deploy') {
         steps {
             script {
-                sh 'kubectl apply -f k8s-deployment.yaml'
+                sh 'kubectl apply -f k8s-deployment.yaml --token 0839523143023d5f937a90d196a0fb3dea1bf3485317c2c679b0d77478682d7607dabd0a43a0e844725c170d2f541df9405bcab5d467a8e375534290d0dc6ceb --server https://eq-aksdc-dns-2008bf15.hcp.eastasia.azmk8s.io:443'
                 sh 'kubectl set image deployment/my-python-deployment my-python-app=$registry:$BUILD_NUMBER'
             }
         }
