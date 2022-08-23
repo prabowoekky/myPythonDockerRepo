@@ -39,7 +39,7 @@ pipeline {
 
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi $registryUrl/$registry:$BUILD_NUMBER"
+        sh "docker rmi $registry:$BUILD_NUMBER"
       }
     }
    
@@ -47,7 +47,7 @@ pipeline {
         steps {
             script {
                 sh 'kubectl apply -f k8s-deployment.yaml'
-                sh 'kubectl set image deployment/my-python-deployment my-python-app=$registryUrl/$registry:$BUILD_NUMBER'
+                sh 'kubectl set image deployment/my-python-deployment my-python-app=$registry:$BUILD_NUMBER'
             }
         }
     }
