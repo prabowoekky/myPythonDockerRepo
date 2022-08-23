@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: my-python-app
-        image: kube
+        image: azureaksdrc.azurecr.io/kube:#{Build.BuildId}#
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
