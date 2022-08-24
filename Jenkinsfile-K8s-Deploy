@@ -65,9 +65,8 @@ pipeline {
     stage ('Balancing Service') {
         steps {
             script {
-                sh "kubectl config use-context azure-aksDRC"
-                service-drc = bat(script: "kubectl get svc | grep python | awk '{print $3}'", returnStdout: true).trim().readLines().drop(1).join(" ")
-                sh "echo ${service-drc}"
+                sh "chmod +x bash-service.sh"
+                sh('./bash-service.sh')
             }
         }
     } 
