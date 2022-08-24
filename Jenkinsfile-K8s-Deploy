@@ -68,11 +68,11 @@ pipeline {
                 sh "chmod +x bash-service.sh"
                 sh '''#!/bin/bash
                  kubectl config use-context azure-aksDRC
-                 servicedrc=$(kubectl get svc python-app-svc-drc -ojsonpath='{.spec.clusterIP}')
+                 servicedrc=$(kubectl get svc | grep python-app-svc-dc | awk '{print $4}')
                  echo $servicedrc
                  sed -i "s/service-drc/$servicedrc/g" balancing-service.yaml
                  kubectl config use-context eq-aksDC
-                 servicedc=$(kubectl get svc python-app-svc-dc -ojsonpath='{.spec.clusterIP}')
+                 servicedc=$(kubectl get svc | grep python-app-svc-drc | awk '{print $4}')
                  echo $servicedc
                  sed -i "s/service-dc/$servicedc/g" balancing-service.yaml
                  kubectl apply -f balancing-service.yaml
