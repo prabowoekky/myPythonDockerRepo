@@ -46,7 +46,7 @@ pipeline {
     stage ('K8S Deploy') {
         steps {
             script {
-                sh 'cp /root/.kube/config /var/lib/jenkins/.kube/config'
+                sh 'cp -f /root/.kube/config /var/lib/jenkins/.kube/config'
                 sh 'kubectl apply -f k8s-deployment.yaml'
                 sh 'kubectl set image deployment/my-python-deployment my-python-app=$registry:$BUILD_NUMBER'
             }
