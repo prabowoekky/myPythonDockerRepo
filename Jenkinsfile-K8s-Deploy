@@ -68,8 +68,8 @@ pipeline {
                 sh "chmod +x bash-service.sh"
                 sh '''#!/bin/bash
                  kubectl config use-context azure-aksDRC
-                 export service-drc=$(kubectl get svc python-app-svc-drc -ojsonpath='{.spec.clusterIP}')
-                 echo ${service-drc}
+                 servicedrc=$(kubectl get svc python-app-svc-drc -ojsonpath='{.spec.clusterIP}')
+                 echo $servicedrc
                  
                 '''
             }
