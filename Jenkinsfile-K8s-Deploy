@@ -70,11 +70,11 @@ pipeline {
                  kubectl config use-context azure-aksDRC
                  servicedrc=$(kubectl get svc python-app-svc-drc -ojsonpath='{.spec.clusterIP}')
                  echo $servicedrc
-                 sed -i 's/service-drc/$servicedrc/g' balancing-service.yaml
+                 sed -i "s/service-drc/$servicedrc/g" balancing-service.yaml
                  kubectl config use-context eq-aksDC
                  servicedc=$(kubectl get svc python-app-svc-dc -ojsonpath='{.spec.clusterIP}')
                  echo $servicedc
-                 sed -i 's/service-dc/$servicedc/g' balancing-service.yaml
+                 sed -i "s/service-dc/$servicedc/g" balancing-service.yaml
                  kubectl apply -f balancing-service.yaml
                  
                 '''
