@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-python-deployment
+  name: my-python-deployment-dc
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: python-app
+      app: python-app-dc
   template:
     metadata:
       labels:
-        app: python-app
+        app: python-app-dc
     spec:
       containers:
-      - name: my-python-app
+      - name: my-python-app-dc
         image: azureaksdrc.azurecr.io/kube:27
         imagePullPolicy: Always
         ports:
@@ -23,12 +23,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: python-app-svc
+  name: python-app-svc-dc
 spec:
   selector:
-    app: python-app
+    app: python-app-dc
   ports:
     - protocol: TCP
       port: 5000
       targetPort: 5000
-  type: LoadBalancer
