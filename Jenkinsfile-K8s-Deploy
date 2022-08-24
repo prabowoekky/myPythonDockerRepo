@@ -40,6 +40,7 @@ pipeline {
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
+        sh "docker rmi $registryUrl/$registry:$BUILD_NUMBER"
       }
     }
    
@@ -60,7 +61,20 @@ pipeline {
                 sh 'kubectl set image deployment/my-python-deployment-drc my-python-app-drc=$registry:$BUILD_NUMBER'
             }
         }
-    }  
+    }
+    stage ('Balancing Service') {
+        steps {
+            script {
+                sh 'kubectl config use-context azure-aksDRC'
+                sh 'service-drc=$(kubectl get svc | grep python | awk '{print $3}')'
+                sh 'sed -i 's/service-drc/$service-drc/g' balancing-service.yaml'
+                sh 'kubectl config use-context eq-aksDC'
+                sh 'service-dc=$(kubectl get svc | grep python | awk '{print $3}')'
+                sh 'sed -i 's/service-dc/$service-dc/g' balancing-service.yaml'
+                sh 'kubectl apply -f balancing-service.yaml'
+            }
+        }
+    } 
     }  
 }
 
