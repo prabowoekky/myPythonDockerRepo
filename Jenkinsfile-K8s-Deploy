@@ -66,7 +66,8 @@ pipeline {
         steps {
             script {
                 sh 'def file = new File('balancing-service.yaml')'
-                sh 'service-drc=$(kubectl get svc | grep python | awk '{print $3}')'
+                sh 'kubectl config use-context azure-aksDRC'
+                service-drc = sh(script: "kubectl get svc | grep python | awk '{print $3}')", returnStdout: true).toString().trim()
                 sh 'def newConfig = file.text.replace('service-drc', '${service-drc}')'
                 sh 'kubectl apply -f balancing-service.yaml'
             }
