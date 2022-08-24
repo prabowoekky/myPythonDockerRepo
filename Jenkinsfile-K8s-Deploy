@@ -45,7 +45,6 @@ pipeline {
    
     stage ('K8S Deploy') {
         steps {
-          sh "cp -f /root/.kube/config /var/lib/jenkins/.kube/config"
             script {
                 sh 'cp -f /root/.kube/config /var/lib/jenkins/.kube/config'
                 sh 'kubectl apply -f k8s-deployment.yaml'
