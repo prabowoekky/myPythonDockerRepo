@@ -65,12 +65,9 @@ pipeline {
     stage ('Balancing Service') {
         steps {
             script {
-                sh 'kubectl config use-context azure-aksDRC'
+                sh 'def file = new File('balancing-service.yaml')'
                 sh 'service-drc=$(kubectl get svc | grep python | awk '{print $3}')'
-                sh 'sed -i 's/service-drc/$service-drc/g' balancing-service.yaml'
-                sh 'kubectl config use-context eq-aksDC'
-                sh 'service-dc=$(kubectl get svc | grep python | awk '{print $3}')'
-                sh 'sed -i 's/service-dc/$service-dc/g' balancing-service.yaml'
+                sh 'def newConfig = file.text.replace('service-drc', '${service-drc}')'
                 sh 'kubectl apply -f balancing-service.yaml'
             }
         }
