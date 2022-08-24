@@ -43,15 +43,24 @@ pipeline {
       }
     }
    
-    stage ('K8S Deploy') {
+    stage ('K8S Deploy DC') {
         steps {
             script {
-                sh 'kubectl apply -f k8s-deployment.yaml'
-                sh 'kubectl set image deployment/my-python-deployment my-python-app=$registry:$BUILD_NUMBER'
+                sh 'kubectl config use-context eq-aksDC'
+                sh 'kubectl apply -f k8s-deployment-DC.yaml'
+                sh 'kubectl set image deployment/my-python-deployment-dc my-python-app=$registry:$BUILD_NUMBER'
             }
         }
     }
-  
+    stage ('K8S Deploy DRC') {
+        steps {
+            script {
+                sh 'kubectl config use-context azure-aksDRC'
+                sh 'kubectl apply -f k8s-deployment-DRC.yaml'
+                sh 'kubectl set image deployment/my-python-deployment-drc my-python-app=$registry:$BUILD_NUMBER'
+            }
+        }
+    }  
     }  
 }
 
