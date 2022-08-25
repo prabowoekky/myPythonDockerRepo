@@ -59,7 +59,7 @@ pipeline {
             script {
                 sh 'kubectl config use-context azure-aksDRC'
                 sh 'kubectl apply -f k8s-deployment-DRC.yaml'
-                sh 'kubectl set image deployment/my-python-deployment-drc my-python-app-drc=$registryUrl/$registry:$BUILD_NUMBE'
+                sh 'kubectl set image deployment/my-python-deployment-drc my-python-app-drc=$registryUrl/$registry:$BUILD_NUMBER'
             }
         }
     }
