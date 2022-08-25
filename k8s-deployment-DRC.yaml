@@ -26,7 +26,7 @@ metadata:
   name: python-app-svc-drc
 spec:
   selector:
-    app: python-app-dc
+    app: python-app-drc
   ports:
     - protocol: TCP
       port: 5000
