@@ -49,7 +49,7 @@ pipeline {
             script {
                 sh 'kubectl config use-context eq-aksDC'
                 sh 'kubectl apply -f k8s-deployment-DC.yaml'
-                sh 'kubectl set image deployment/my-python-deployment-dc my-python-app-dc=$registry:$BUILD_NUMBER'
+                sh 'kubectl set image deployment/my-python-deployment-dc my-python-app-dc=$registryUrl/$registry:$BUILD_NUMBER'
             }
         }
     }
