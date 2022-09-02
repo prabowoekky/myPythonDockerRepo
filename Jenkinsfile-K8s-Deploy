@@ -58,8 +58,8 @@ pipeline {
     stage ('K8S Deploy DRC') {
         steps {
             script {
-                sh 'kubectl --context="${CTX_CLUSTER2}" apply -f k8s-deployment-DRC.yaml'
-                sh 'kubectl --context="${CTX_CLUSTER2}" set image deployment/my-python-deployment-drc my-python-app-drc=$registryUrl/$registry:$BUILD_NUMBER'
+                //sh 'kubectl --context="${CTX_CLUSTER2}" apply -f k8s-deployment-DRC.yaml'
+                //sh 'kubectl --context="${CTX_CLUSTER2}" set image deployment/my-python-deployment-drc my-python-app-drc=$registryUrl/$registry:$BUILD_NUMBER'
             }
         }
     }
