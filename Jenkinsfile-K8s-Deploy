@@ -7,12 +7,14 @@ pipeline {
         registryCredential = 'acr-credentials'
         registryUrl = 'azureaksdrc.azurecr.io'
         dockerImage = ''
+        CTX_CLUSTER1 = 'eq-aksDC'
+        CTX_CLUSTER2 = 'azure-aksDRC'
     }
     stages {
 
         stage ('checkout') {
             steps {
-            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/prabowoekky/myPythonDockerRepo']]])
+            checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/prabowoekky/myPythonDockerRepo.git']]])
             }
         }
        
@@ -48,18 +50,16 @@ pipeline {
         steps {
             script {
                 echo "test"
-                //sh 'kubectl config use-context eq-aksDC'
-                //sh 'kubectl apply -f k8s-deployment-DC.yaml'
-                //sh 'kubectl set image deployment/my-python-deployment-dc my-python-app-dc=$registryUrl/$registry:$BUILD_NUMBER'
+                sh 'kubectl --context="${CTX_CLUSTER1}" apply -f k8s-deployment-DC.yaml'
+                sh 'kubectl --context="${CTX_CLUSTER1}" set image deployment/my-python-deployment-dc my-python-app-dc=$registryUrl/$registry:$BUILD_NUMBER'
             }
         }
     }
     stage ('K8S Deploy DRC') {
         steps {
             script {
-                sh 'kubectl config use-context azure-aksDRC'
-                sh 'kubectl apply -f k8s-deployment-DRC.yaml'
-                sh 'kubectl set image deployment/my-python-deployment-drc my-python-app-drc=$registryUrl/$registry:$BUILD_NUMBER'
+                sh 'kubectl --context="${CTX_CLUSTER2}" apply -f k8s-deployment-DRC.yaml'
+                sh 'kubectl --context="${CTX_CLUSTER2}" set image deployment/my-python-deployment-drc my-python-app-drc=$registryUrl/$registry:$BUILD_NUMBER'
             }
         }
     }
@@ -68,12 +68,11 @@ pipeline {
             script {
                 sh "chmod +x bash-service.sh"
                 sh '''#!/bin/bash
-                 kubectl config use-context azure-aksDRC
-                 servicedrc=$(kubectl get svc | grep python-app-svc-drc | awk '{print $4}')
+                 servicedrc=$(kubectl --context="${CTX_CLUSTER2}" get svc | grep python-app-svc-drc | awk '{print $4}')
                  echo $servicedrc
                  sed -i "s/service-drc/$servicedrc/g" balancing-service.yaml
                  kubectl config use-context eq-aksDC
-                 servicedc=$(kubectl get svc | grep python-app-svc-dc | awk '{print $4}')
+                 servicedc=$(kubectl --context="${CTX_CLUSTER1}" get svc | grep python-app-svc-dc | awk '{print $4}')
                  echo $servicedc
                  sed -i "s/service-dc/$servicedc/g" balancing-service.yaml
                  kubectl apply -f balancing-service.yaml
